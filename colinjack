@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+import sys, random
+
+cards = [2, 3, 4, 5, 6, 7, 8, 9, 10,
+10, 10, 10, 11] # Jack Queen King Ace
+
+win =  "You Win!!!"
+lost = "You Lose"
+
+def hit_choice():
+	while True:
+		inpt = input("Hit (H) or Stick (S):")
+		if inpt.upper() == 'H':
+			return True
+		elif inpt.upper() == 'S':
+			return False
+		print("Did not understand that")
+
+class Hand:
+	def __init__(self, name, print_aces):
+		self.score = 0
+		self.name = name
+		self._ace_in_pack = False
+		self.bust = self.score > 21
+		self._ace_print = print_aces
+	def hit(self, print_score=True):
+		card = random.choice(cards)
+		self.score += card
+		if card == 11:
+			self._ace_in_pack = True
+		if self.score > 21:
+			if self._ace_in_pack:
+				self.score -= 10 # 11 Ace Becomes 1
+				self._ace_in_pack = False
+			else:
+				print(self.name, "Bust")
+		self.bust = self.score > 21
+		if print_score:
+			self.print_score()
+	def print_score(self):
+		print(self.name, "score is: ", self.score)
+		if self._ace_in_pack and self._ace_print:
+			print("You have an ace")
+
+def print_score(name, score, ace):
+    print(name, "score is: ", score)
+    if ace:
+	print("You have an ace")
+
+
+player = dict(name="Your"
+player = Hand("Your", True)
+player.hit(False); player.hit() # First Two Cards
+dealer = Hand("Dealer", False)
+dealer.hit(); dealer.hit(False)
+while not player.bust:
+	if hit_choice():
+		player.hit()
+	else:
+        	break
+
+winnerstr = lost # Burdern proof is on player
+if not player.bust:
+	dealer.print_score()
+	while dealer.score < 17:
+		dealer.hit()
+	if player.score > dealer.score or dealer.bust:
+		winnerstr = win
+
+print(winnerstr)
